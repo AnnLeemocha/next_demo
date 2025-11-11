@@ -116,7 +116,45 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
-    @apply bg-background text-foreground;
+    @apply my-0 mx-auto p-12 text-center bg-background text-foreground transition duration-300 ease-in-out;
+  }
+
+  input {
+    background-color: var(--input);
+    @apply px-2 py-1 rounded;
+  }
+
+  section,
+  .card {
+    background-color: var(--color-card);
+    color: var(--color-card-foreground);
+    box-shadow: 0 0 15px rgba(85, 85, 85, 0.5);
+    @apply my-4 p-[2rem] rounded-[10px];
+  }
+
+  strong {
+    @apply text-red-500;
+  }
+
+  h1 {
+    @apply text-3xl font-bold;
+  }
+
+  h3 {
+    @apply text-xl font-bold mb-2;
+  }
+
+  .modal {
+    background-color: rgba(0, 0, 0, 0.4);
+    @apply fixed z-[1000] w-full h-full overflow-auto left-0 top-0;
+  }
+
+  .modal-content {
+    background-color: var(--color-card);
+    color: var(--color-card-foreground);
+    box-shadow: var(--color-card-shadow);
+    @apply w-[90%] max-w-[400px] relative mx-auto my-[15%] p-5 rounded-[10px];
   }
 }

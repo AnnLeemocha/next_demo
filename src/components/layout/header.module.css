@@ -1,0 +1,5 @@
+.nav {
+    background-color: var(--color-card);
+    color: var(--color-card-foreground);
+    box-shadow: 0 0 15px rgba(85, 85, 85, 0.5);
+}

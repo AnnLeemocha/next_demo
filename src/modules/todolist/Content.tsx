@@ -1,9 +1,9 @@
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
-import { TodoList } from "@/components/todolist/TodoList";
+import { TodoList } from "./TodoList";
 
 export default function Page() {
     return (
-        <div >
+        <div>
             <h1 className="mb-4">📝 備忘錄</h1>
             <ThemeToggle />
             <TodoList />
