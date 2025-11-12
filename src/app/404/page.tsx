@@ -6,8 +6,6 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-    notFound();
-  return (
-    <></>
-  );
+  notFound();
+  return <></>;
 }

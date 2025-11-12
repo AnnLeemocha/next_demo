@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
   if (!body.title || !body.time) {
     return NextResponse.json(
       { error: "Title and time are required" },
-      { status: 400, headers: jsonHeader }
+      { status: 400, headers: jsonHeader },
     );
   }
 
@@ -42,7 +42,7 @@ export async function PUT(req: NextRequest) {
   if (!id) {
     return NextResponse.json(
       { error: "ID is required" },
-      { status: 400, headers: jsonHeader }
+      { status: 400, headers: jsonHeader },
     );
   }
 
@@ -61,7 +61,7 @@ export async function DELETE(req: NextRequest) {
   if (!id) {
     return NextResponse.json(
       { error: "ID is required" },
-      { status: 400, headers: jsonHeader }
+      { status: 400, headers: jsonHeader },
     );
   }
 

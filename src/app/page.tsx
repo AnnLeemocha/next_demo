@@ -2,7 +2,6 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 
 export default function Page() {
-
   return (
     <div className="flex gap-3 m-auto p-5">
       <Link
@@ -33,5 +32,5 @@ export default function Page() {
         📝 前往 todo list
       </Link>
     </div>
-  )
+  );
 }

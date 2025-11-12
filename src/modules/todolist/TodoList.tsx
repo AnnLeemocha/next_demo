@@ -7,120 +7,124 @@ import { DEFAULT_LIST } from "@/config/constant";
 
 // ---------- localStorage 工具 ----------
 function getTodosFromStorage(): TodoItem[] {
-    const str = localStorage.getItem("todos");
-    if (!str) return DEFAULT_LIST;
-    try {
-        const parsed = JSON.parse(str);
-        if (!Array.isArray(parsed)) return DEFAULT_LIST;
-        return parsed.filter(
-            (t) => t && typeof t.title === "string" && typeof t.time === "string"
-        ) as TodoItem[];
-    } catch {
-        return DEFAULT_LIST;
-    }
+  const str = localStorage.getItem("todos");
+  if (!str) return DEFAULT_LIST;
+  try {
+    const parsed = JSON.parse(str);
+    if (!Array.isArray(parsed)) return DEFAULT_LIST;
+    return parsed.filter(
+      (t) => t && typeof t.title === "string" && typeof t.time === "string",
+    ) as TodoItem[];
+  } catch {
+    return DEFAULT_LIST;
+  }
 }
 
 function saveTodos(list: TodoItem[]) {
-    localStorage.setItem("todos", JSON.stringify(list));
+  localStorage.setItem("todos", JSON.stringify(list));
 }
 
 // ---------- 主組件 ----------
 export function TodoList() {
-    const [todos, setTodos] = useState<TodoItem[]>([]); // 初始為空
-    const [search, setSearch] = useState("");
-    const [sortAsc, setSortAsc] = useState(true);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editItem, setEditItem] = useState<TodoItem | null>(null);
+  const [todos, setTodos] = useState<TodoItem[]>([]); // 初始為空
+  const [search, setSearch] = useState("");
+  const [sortAsc, setSortAsc] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editItem, setEditItem] = useState<TodoItem | null>(null);
 
-    // 只在瀏覽器讀取 localStorage
-    useEffect(() => {
-        const storedTodos = getTodosFromStorage();
-        setTodos(storedTodos);
-    }, []);
+  // 只在瀏覽器讀取 localStorage
+  useEffect(() => {
+    const storedTodos = getTodosFromStorage();
+    setTodos(storedTodos);
+  }, []);
 
-    // todos 一變更就儲存至 localStorage
-    useEffect(() => {
-        if (todos.length > 0) saveTodos(todos);
-    }, [todos]);
+  // todos 一變更就儲存至 localStorage
+  useEffect(() => {
+    if (todos.length > 0) saveTodos(todos);
+  }, [todos]);
 
-    // search + sort
-    const filteredTodos = todos
-        .filter((t) => t.title.toLowerCase().includes(search.toLowerCase()))
-        .sort((a, b) =>
-            sortAsc ? a.time.localeCompare(b.time) : b.time.localeCompare(a.time)
-        );
-
-    function handleAddOrEdit(
-        data: Omit<TodoItem, "id" | "completed">,
-        editId?: string
-    ) {
-        if (editId) {
-            // 修改
-            setTodos((prev) =>
-                prev.map((t) => (t.id === editId ? { ...t, ...data } : t))
-            );
-        } else {
-            // 新增
-            const newItem: TodoItem = {
-                id: Date.now().toString(),
-                title: data.title,
-                time: data.time,
-                completed: false,
-            };
-            setTodos((prev) => [...prev, newItem]);
-        }
-    }
-
-    function handleDelete(id: string) {
-        if (confirm("確定要刪除嗎？"))
-            setTodos((prev) => prev.filter((t) => t.id !== id));
-    }
-
-    return (
-        <>
-            <input
-                type="text"
-                placeholder="搜尋..."
-                className="block w-full my-4"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-            />
-
-            <div className="mb-2.5 flex justify-between">
-                <button onClick={() => setSortAsc((prev) => !prev)}>
-                    排序: {sortAsc ? "升序" : "降序"}
-                </button>
-                <button
-                    onClick={() => {
-                        setEditItem(null);
-                        setIsModalOpen(true);
-                    }}
-                >
-                    新增
-                </button>
-            </div>
-            <div className="text-start">
-                <p className="mb-1">
-                    待辦清單：({todos.filter((t) => !t.completed).length}/{todos.length})
-                </p>
-                {filteredTodos.map((todo) => (
-                    <TodoItem
-                        key={todo.id}
-                        item={todo}
-                        onEdit={(item) => {
-                            setEditItem(item);
-                            setIsModalOpen(true);
-                        }}
-                        onDelete={handleDelete}
-                    />
-                ))}
-            </div>
-            <TodoModal
-                open={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                onConfirm={handleAddOrEdit}
-                editItem={editItem}
-            />
-        </>
+  // search + sort
+  const filteredTodos = todos
+    .filter((t) => t.title.toLowerCase().includes(search.toLowerCase()))
+    .sort((a, b) =>
+      sortAsc ? a.time.localeCompare(b.time) : b.time.localeCompare(a.time),
     );
+
+  function handleAddOrEdit(
+    data: Omit<TodoItem, "id" | "completed">,
+    editId?: string,
+  ) {
+    if (editId) {
+      // 修改
+      setTodos((prev) =>
+        prev.map((t) => (t.id === editId ? { ...t, ...data } : t)),
+      );
+    } else {
+      // 新增
+      const newItem: TodoItem = {
+        id: Date.now().toString(),
+        title: data.title,
+        time: data.time,
+        completed: false,
+      };
+      setTodos((prev) => [...prev, newItem]);
+    }
+  }
+
+  function handleDelete(id: string) {
+    if (confirm("確定要刪除嗎？"))
+      setTodos((prev) => prev.filter((t) => t.id !== id));
+  }
+
+  return (
+    <>
+      <input
+        type="text"
+        placeholder="搜尋..."
+        className="block w-full my-4"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
+
+      <div className="mb-2.5 flex justify-between">
+        <button
+          onClick={() => setSortAsc((prev) => !prev)}
+          className="mt-2 px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer disabled:cursor-not-allowed border border-gray-300 dark:border-gray-500"
+        >
+          排序: {sortAsc ? "升序" : "降序"}
+        </button>
+        <button
+          onClick={() => {
+            setEditItem(null);
+            setIsModalOpen(true);
+          }}
+          className="mt-2 px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer disabled:cursor-not-allowed border border-gray-300 dark:border-gray-500"
+        >
+          新增
+        </button>
+      </div>
+      <div className="text-start">
+        <p className="mb-1">
+          待辦清單：({todos.filter((t) => !t.completed).length}/{todos.length})
+        </p>
+        {filteredTodos.map((todo) => (
+          <TodoItem
+            key={todo.id}
+            item={todo}
+            onEdit={(item) => {
+              setEditItem(item);
+              setIsModalOpen(true);
+            }}
+            onDelete={handleDelete}
+          />
+        ))}
+      </div>
+      <TodoModal
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={handleAddOrEdit}
+        editItem={editItem}
+      />
+    </>
+  );
 }

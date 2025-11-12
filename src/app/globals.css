@@ -135,7 +135,7 @@
   }
 
   strong {
-    @apply text-red-500;
+    @apply text-red-500 text-xl;
   }
 
   h1 {

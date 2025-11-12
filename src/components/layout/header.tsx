@@ -28,25 +28,28 @@ export function Header({ children }: { children: React.ReactNode }) {
       <header>
         <div className="header flex gap-2 mt-6 mb-4 justify-center items-center">
           <ThemeToggle />
-          <Link href={"/"} className="px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer disabled:cursor-not-allowed border border-gray-300 dark:border-gray-500" >
+          <Link
+            href={"/"}
+            className="px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer disabled:cursor-not-allowed border border-gray-300 dark:border-gray-500"
+          >
             回首頁
           </Link>
         </div>
-        <nav className={`flex gap-2 my-4 justify-center items-center w-full font-bold rounded-[10px] p-4 ${styles.nav}`}>
-          {routers.map(item => (
+        <nav
+          className={`flex gap-2 my-4 justify-center items-center w-full font-bold rounded-[10px] p-4 ${styles.nav}`}
+        >
+          {routers.map((item) => (
             <button
               key={item.name}
               onClick={() => handleChangeTab(item.page)}
-              className={`px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer disabled:cursor-not-allowed border border-gray-300 dark:border-gray-500 ${item.page === pathname ? "bg-blue-500 hover:text-black text-white" : ""}`}
+              className={`px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer disabled:cursor-not-allowed border border-gray-300 dark:border-gray-500 ${item.page === pathname ? "bg-blue-500 hover:text-black text-white dark:hover:text-white" : ""}`}
             >
               {item.name}
             </button>
           ))}
         </nav>
       </header>
-      <main className="card mx-auto">
-        {children}
-      </main>
+      <main className="card mx-auto">{children}</main>
     </>
   );
 }

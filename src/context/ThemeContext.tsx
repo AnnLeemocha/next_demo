@@ -1,11 +1,10 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from "react";
 
-
-type Theme = 'light' | 'dark';
+type Theme = "light" | "dark";
 // type Theme = 'light' | 'dark' | 'blue' | 'green';
-export const themes: Theme[] = ['light', 'dark'];
+export const themes: Theme[] = ["light", "dark"];
 // const themes: Theme[] = ['light', 'dark', 'blue', 'green'];
 
 interface ThemeContextType {
@@ -17,18 +16,20 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
-  const [theme, setThemeState] = useState<Theme>('light');
+  const [theme, setThemeState] = useState<Theme>("light");
 
   // 初始化主題
   useEffect(() => {
-    const storedTheme = localStorage.getItem('theme') as Theme | null;
+    const storedTheme = localStorage.getItem("theme") as Theme | null;
     if (storedTheme) {
       setThemeState(storedTheme);
       applyThemeClass(storedTheme);
     } else {
       // 系統偏好只有 light/dark
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const initialTheme: Theme = prefersDark ? 'dark' : 'light';
+      const prefersDark = window.matchMedia(
+        "(prefers-color-scheme: dark)",
+      ).matches;
+      const initialTheme: Theme = prefersDark ? "dark" : "light";
       setThemeState(initialTheme);
       applyThemeClass(initialTheme);
     }
@@ -37,7 +38,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   // 實際修改 <html> class
   const applyThemeClass = (theme: Theme) => {
     const root = document.documentElement;
-    root.classList.remove('light', 'dark'); // 先清除舊 class
+    root.classList.remove("light", "dark"); // 先清除舊 class
     // root.classList.remove('light', 'dark', 'blue', 'green'); // 先清除舊 class
     root.classList.add(theme);
   };
@@ -45,7 +46,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   // 切換到指定模式
   const setTheme = (newTheme: Theme) => {
     setThemeState(newTheme);
-    localStorage.setItem('theme', newTheme);
+    localStorage.setItem("theme", newTheme);
     applyThemeClass(newTheme);
   };
 
@@ -66,6 +67,6 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
 
 export const useTheme = () => {
   const context = useContext(ThemeContext);
-  if (!context) throw new Error('useTheme 必須在 ThemeProvider 內使用');
+  if (!context) throw new Error("useTheme 必須在 ThemeProvider 內使用");
   return context;
 };
